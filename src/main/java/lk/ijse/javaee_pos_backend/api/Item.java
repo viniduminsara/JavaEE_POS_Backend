@@ -5,15 +5,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 @WebServlet(name = "item", urlPatterns = "/item", loadOnStartup = 5)
 public class Item extends HttpServlet {
 
+    Logger logger = LoggerFactory.getLogger(Item.class);
+
     @Override
     public void init() throws ServletException {
-
+        logger.info("Init the item servlet");
     }
 
     @Override
