@@ -7,6 +7,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.ijse.javaee_pos_backend.bo.BOFactory;
+import lk.ijse.javaee_pos_backend.bo.custom.CustomerBO;
 import lk.ijse.javaee_pos_backend.db.DBProcess;
 import lk.ijse.javaee_pos_backend.dto.CustomerDTO;
 import org.slf4j.Logger;
@@ -22,6 +24,7 @@ import java.sql.SQLException;
 public class Customer extends HttpServlet {
 
     Logger logger = LoggerFactory.getLogger(Customer.class);
+    CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
     private Connection connection;
 
     @Override
@@ -51,7 +54,7 @@ public class Customer extends HttpServlet {
             Jsonb jsonb = JsonbBuilder.create();
             CustomerDTO customerDTO = jsonb.fromJson(req.getReader(), CustomerDTO.class);
 
-            if(DBProcess.createCustomer(customerDTO, connection)){
+            if(customerBO.createCustomer(customerDTO, connection)){
                 logger.info("Customer is saved");
                 resp.setStatus(HttpServletResponse.SC_CREATED);
             }else{
