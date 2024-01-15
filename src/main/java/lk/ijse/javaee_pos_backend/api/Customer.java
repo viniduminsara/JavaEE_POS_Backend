@@ -17,6 +17,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 @WebServlet(name = "customer", urlPatterns = "/customer", loadOnStartup = 5)
 public class Customer extends HttpServlet {
@@ -97,6 +98,26 @@ public class Customer extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        if (req.getContentType() != null && req.getContentType().toLowerCase().startsWith("application/json")){
+            Jsonb jsonb = JsonbBuilder.create();
+            CustomerDTO customerDTO = jsonb.fromJson(req.getReader(), CustomerDTO.class);
 
+            try {
+                if (customerBO.deleteCustomer(customerDTO.getCustomerId(), connection)){
+                    logger.info("Customer is Deleted");
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                }else{
+                    logger.error("Failed to Delete");
+                    resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+
+        }else{
+            logger.error("Did not contain json ContentType");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 }
