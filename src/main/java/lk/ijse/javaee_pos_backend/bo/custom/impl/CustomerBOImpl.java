@@ -8,6 +8,8 @@ import lk.ijse.javaee_pos_backend.entity.Customer;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerBOImpl implements CustomerBO {
 
@@ -36,5 +38,20 @@ public class CustomerBOImpl implements CustomerBO {
     @Override
     public boolean deleteCustomer(String customerId, Connection connection) throws SQLException {
         return customerDAO.delete(connection, customerId);
+    }
+
+    @Override
+    public List<CustomerDTO> getAllCustomers(Connection connection) throws SQLException {
+        List<Customer> customers = customerDAO.getAll(connection);
+        List<CustomerDTO> customerDTOS = new ArrayList<>();
+        for (Customer customer : customers) {
+            customerDTOS.add(new CustomerDTO(
+                    customer.getCustomerId(),
+                    customer.getName(),
+                    customer.getAddress(),
+                    customer.getContact()
+            ));
+        }
+        return customerDTOS;
     }
 }

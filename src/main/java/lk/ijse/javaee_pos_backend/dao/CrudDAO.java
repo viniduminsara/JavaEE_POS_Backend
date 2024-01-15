@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CrudDAO<T, ID> extends SuperDAO{
 
-    List<T> getAll();
+    List<T> getAll(Connection connection) throws SQLException;
 
     boolean save(Connection connection, T dto) throws SQLException;
 

@@ -15,6 +15,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -44,6 +45,27 @@ public class Customer extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        try {
+            List<CustomerDTO> customers = customerBO.getAllCustomers(connection);
+
+            if (!customers.isEmpty()){
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+
+                PrintWriter writer = resp.getWriter();
+                Jsonb jsonb = JsonbBuilder.create();
+                String json = jsonb.toJson(customers);
+                writer.write(json);
+
+                logger.info("Customer data send");
+                resp.setStatus(HttpServletResponse.SC_OK);
+            }else{
+                resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
 
     }
 
