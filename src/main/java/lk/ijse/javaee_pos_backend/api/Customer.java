@@ -2,14 +2,12 @@ package lk.ijse.javaee_pos_backend.api;
 
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lk.ijse.javaee_pos_backend.bo.BOFactory;
 import lk.ijse.javaee_pos_backend.bo.custom.CustomerBO;
-import lk.ijse.javaee_pos_backend.db.DBProcess;
 import lk.ijse.javaee_pos_backend.dto.CustomerDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +26,7 @@ public class Customer extends HttpServlet {
     private Connection connection;
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         logger.info("Init the customer servlet");
 
         try {
@@ -44,33 +42,61 @@ public class Customer extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (req.getContentType() != null && req.getContentType().toLowerCase().startsWith("application/json")){
             Jsonb jsonb = JsonbBuilder.create();
             CustomerDTO customerDTO = jsonb.fromJson(req.getReader(), CustomerDTO.class);
 
-            if(customerBO.createCustomer(customerDTO, connection)){
-                logger.info("Customer is saved");
-                resp.setStatus(HttpServletResponse.SC_CREATED);
-            }else{
-                logger.error("Failed to save");
+            try {
+                if(customerBO.createCustomer(customerDTO, connection)){
+                    logger.info("Customer is saved");
+                    resp.setStatus(HttpServletResponse.SC_CREATED);
+                }else{
+                    logger.error("Failed to Save");
+                    resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
                 resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
+        }else {
+            logger.error("Did not contain json ContentType");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        if (req.getContentType() != null && req.getContentType().toLowerCase().startsWith("application/json")){
+            Jsonb jsonb = JsonbBuilder.create();
+            CustomerDTO customerDTO = jsonb.fromJson(req.getReader(), CustomerDTO.class);
 
+            try {
+                if (customerBO.updateCustomer(customerDTO, connection)){
+                    logger.info("Customer is Updated");
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                }else{
+                    logger.error("Failed to Update");
+                    resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+
+        }else {
+            logger.error("Did not contain json ContentType");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
     }
 }
