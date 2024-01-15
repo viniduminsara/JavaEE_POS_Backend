@@ -26,6 +26,7 @@ public class Customer extends HttpServlet {
     Logger logger = LoggerFactory.getLogger(Customer.class);
     CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
     private Connection connection;
+    Jsonb jsonb = JsonbBuilder.create();
 
     @Override
     public void init() {
@@ -53,7 +54,6 @@ public class Customer extends HttpServlet {
                 resp.setCharacterEncoding("UTF-8");
 
                 PrintWriter writer = resp.getWriter();
-                Jsonb jsonb = JsonbBuilder.create();
                 String json = jsonb.toJson(customers);
                 writer.write(json);
 
@@ -72,7 +72,6 @@ public class Customer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (req.getContentType() != null && req.getContentType().toLowerCase().startsWith("application/json")){
-            Jsonb jsonb = JsonbBuilder.create();
             CustomerDTO customerDTO = jsonb.fromJson(req.getReader(), CustomerDTO.class);
 
             try {
@@ -96,7 +95,6 @@ public class Customer extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (req.getContentType() != null && req.getContentType().toLowerCase().startsWith("application/json")){
-            Jsonb jsonb = JsonbBuilder.create();
             CustomerDTO customerDTO = jsonb.fromJson(req.getReader(), CustomerDTO.class);
 
             try {
@@ -121,7 +119,6 @@ public class Customer extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (req.getContentType() != null && req.getContentType().toLowerCase().startsWith("application/json")){
-            Jsonb jsonb = JsonbBuilder.create();
             CustomerDTO customerDTO = jsonb.fromJson(req.getReader(), CustomerDTO.class);
 
             try {
