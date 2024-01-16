@@ -15,6 +15,7 @@ public class ItemDAOImpl implements ItemDAO {
     private static final String SAVE_QUERY = "INSERT INTO item(item_id, description, unit_price, qty) VALUES (?, ?, ?, ?)";
     private static final String UPDATE_QUERY = "UPDATE item SET description = ?, unit_price = ?, qty = ? WHERE item_id = ?";
     private static final String DELETE_QUERY = "DELETE FROM item WHERE item_id = ?";
+    private static final String SELECT_QUERY = "SELECT * FROM item WHERE item_id = ?";
 
     @Override
     public List<Item> getAll(Connection connection) throws SQLException {
@@ -57,5 +58,20 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public boolean delete(Connection connection, String s) throws SQLException {
         return SQLUtil.execute(connection, DELETE_QUERY, s);
+    }
+
+    @Override
+    public Item get(Connection connection, String itemId) throws SQLException {
+        ResultSet rs = SQLUtil.execute(connection, SELECT_QUERY, itemId);
+
+        if (rs.next()){
+            return new Item(
+                    rs.getString(1),
+                    rs.getString(2),
+                    rs.getDouble(3),
+                    rs.getInt(4)
+            );
+        }
+        return null;
     }
 }
