@@ -39,7 +39,7 @@ public class Item extends HttpServlet {
             InitialContext context = new InitialContext();
             DataSource pool = (DataSource) context.lookup("java:comp/env/jdbc/javaee_pos");
             this.connection = pool.getConnection();
-            logger.info("Obtained new connection (" + connection + ") to customer servlet");
+            logger.info("Obtained new connection (" + connection + ") to item servlet");
 
         } catch (NamingException | SQLException e) {
             e.printStackTrace();
