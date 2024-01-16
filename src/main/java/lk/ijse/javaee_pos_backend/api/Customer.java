@@ -57,7 +57,7 @@ public class Customer extends HttpServlet {
                 String json = jsonb.toJson(customers);
                 writer.write(json);
 
-                logger.info("Customer data send");
+                logger.info("Customers data send");
                 resp.setStatus(HttpServletResponse.SC_OK);
             }else{
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
