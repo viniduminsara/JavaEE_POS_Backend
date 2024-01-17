@@ -4,11 +4,11 @@ This JavaEE-based Point of Sale (POS) System API provides a simple and efficient
 
 ## Technologies Used
 
-- JakarthaEE 9
-- Tomcat 10.1.16
-- MySQL 8.2
-- parsson 1.1.2
-- yasson 2.0.4
+- JakarthaEE `version 9`
+- Tomcat `version 10.1.16`
+- MySQL `version 8.2`
+- parsson `version 1.1.2`
+- yasson `version 2.0.4`
 
 ## API Documentation
 
@@ -26,3 +26,4 @@ Explore the detailed API documentation to understand how to integrate and levera
 
 ## License
 
+This project is licensed under the [MIT LICENSE](https://github.com/viniduminsara/JavaEE_POS_Backend/blob/master/LICENSE.md)
