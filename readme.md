@@ -23,6 +23,11 @@ Explore the detailed API documentation to understand how to integrate and levera
 3. Run Tomcat server.`version 10.1.16 or later`
 4. Deploy project artifact in Tomcat server.
 `edit configuration >  deployment > add your artifact`
+5. Use this [website](https://viniduminsara.github.io/JavaEE_POS_Frontend/) as Frontend.
+
+## Frontend
+- URL - https://viniduminsara.github.io/JavaEE_POS_Frontend/
+- GitHub repo - https://github.com/viniduminsara/JavaEE_POS_Frontend
 
 ## License
 
