@@ -12,12 +12,21 @@ import java.util.List;
 
 public class OrderDetailsDAOImpl implements OrderDetailsDAO {
 
-    private static final String GET_QUERY = "SELECT * FROM order_details WHERE order_id = ?";
+    private static final String GET_QUERY = "SELECT * FROM order_details";
     private static final String SAVE_QUERY = "INSERT INTO order_details(order_id, item_id, qty) VALUES (?, ?, ?)";
 
     @Override
-    public List<OrderDetails> getAll(Connection connection) {
-        return null;
+    public List<OrderDetails> getAll(Connection connection) throws SQLException {
+        ResultSet rs = SQLUtil.execute(connection, GET_QUERY);
+        List<OrderDetails> details = new ArrayList<>();
+        while (rs.next()){
+            details.add(new OrderDetails(
+                    rs.getString(1),
+                    rs.getString(2),
+                    rs.getInt(3)
+            ));
+        }
+        return details;
     }
 
     @Override
@@ -38,19 +47,5 @@ public class OrderDetailsDAOImpl implements OrderDetailsDAO {
     @Override
     public boolean delete(Connection connection, String s) throws SQLException {
         return false;
-    }
-
-    @Override
-    public List<OrderDetails> get(Connection connection, String orderId) throws SQLException {
-        ResultSet rs = SQLUtil.execute(connection, GET_QUERY, orderId);
-        List<OrderDetails> details = new ArrayList<>();
-        while (rs.next()){
-            details.add(new OrderDetails(
-                    rs.getString(1),
-                    rs.getString(2),
-                    rs.getInt(3)
-            ));
-        }
-        return details;
     }
 }

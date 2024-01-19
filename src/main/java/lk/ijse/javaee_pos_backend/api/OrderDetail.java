@@ -48,29 +48,23 @@ public class OrderDetail extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (req.getContentType() != null && req.getContentType().toLowerCase().startsWith("application/json")) {
-            OrderDetailsDTO orderDetailsDTO = jsonb.fromJson(req.getReader(), OrderDetailsDTO.class);
-            try {
-                List<OrderDetailsDTO> orderDetails = orderDetailsBO.getOrderDetails(orderDetailsDTO.getOrderId(), connection);
+        try {
+            List<OrderDetailsDTO> orderDetails = orderDetailsBO.getOrderDetails(connection);
 
-                if (!orderDetails.isEmpty()) {
-                    resp.setContentType("application/json");
-                    resp.setCharacterEncoding("UTF-8");
+            if (!orderDetails.isEmpty()) {
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
 
-                    PrintWriter writer = resp.getWriter();
-                    String json = jsonb.toJson(orderDetails);
-                    writer.write(json);
+                PrintWriter writer = resp.getWriter();
+                String json = jsonb.toJson(orderDetails);
+                writer.write(json);
 
-                    logger.info("Order details data send");
-                    resp.setStatus(HttpServletResponse.SC_OK);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                logger.info("Order details data send");
+                resp.setStatus(HttpServletResponse.SC_OK);
             }
-        }else{
-            logger.error("Did not contain json ContentType");
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -84,7 +78,7 @@ public class OrderDetail extends HttpServlet {
 
             try {
                 if (orderDetailsBO.saveOrderDetails(details, connection)){
-                    logger.info("Order is Saved");
+                    logger.info("Order details are Saved");
                     resp.setStatus(HttpServletResponse.SC_OK);
                 }else {
                     logger.info("Failed to save");

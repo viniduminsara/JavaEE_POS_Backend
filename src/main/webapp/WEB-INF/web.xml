@@ -6,6 +6,6 @@
 
     <context-param>
         <param-name>Origin</param-name>
-        <param-value>http://127.0.0.1:5500</param-value>
+        <param-value>https://viniduminsara.github.io</param-value>
     </context-param>
 </web-app>

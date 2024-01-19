@@ -19,8 +19,8 @@ public class OrderDetailsBOImpl implements OrderDetailsBO {
     ItemDAO itemDAO = (ItemDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ITEM);
 
     @Override
-    public List<OrderDetailsDTO> getOrderDetails(String orderId, Connection connection) throws SQLException {
-        List<OrderDetails> details = orderDetailsDAO.get(connection, orderId);
+    public List<OrderDetailsDTO> getOrderDetails(Connection connection) throws SQLException {
+        List<OrderDetails> details = orderDetailsDAO.getAll(connection);
         List<OrderDetailsDTO> detailsDTOS = new ArrayList<>();
         for (OrderDetails detail : details) {
             detailsDTOS.add(new OrderDetailsDTO(
